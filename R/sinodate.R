@@ -104,7 +104,7 @@ setMethod('show', signature = 'sinodate', definition =
 ### should be in the format of "2012-01-30". Leap Month should be denoted as "1995-08L-12"
 ### don't want to depend on stringr, use built-in regex functions instead
 
-as.sinodate <- function(x, check=TRUE) {
+char2sinodate <- function(x) {
     if (class(x) != "character" | !grepl("^[0-9]{1,4}[-/ ][0-9]{1,2}[Ll]?[-/ ][0-9]{1,2}$", x)) {
         stop("invalid input: x must be in the format of 2012-01-03 or 1995/08L/12")
     }
@@ -152,12 +152,18 @@ setMethod(f = "cantonese", signature = "sinodate", definition = function(object,
     return(paste0(stems[stemIndex], branches[branchIndex], "年", monthStr, "月", dayStr, "日", zodiacStr))
 })
 
+# for compatibility reason
+
+as.character.sinodate <- function(x, ...) {
+    cantonese(x, ...)
+}
 
 #cantonese(as.sinodate("1981-06-20"))
 #cantonese(as.sinodate("1981-06-20"), TRUE)
+#as.character(as.sinodate("1981-06-20"))
+#as.character(as.sinodate("1981-06-20"), TRUE)
 
-
-convertDate <- function(gDate) {
+convertdate <- function(gDate) {
     params <- lookupData(lookup="params")
     referenceDate <- params$referenceDate
     maxDate <- params$maxDate
@@ -197,6 +203,14 @@ convertDate <- function(gDate) {
 #convertDate(as.Date("1981-07-21"))
 #convertDate(as.Date("2014-10-24"))
 #cantonese(convertDate(as.Date("2014-9-28")))
+
+as.sinodate <- function(x, ...) {
+    if (class(x) == "character") {
+        return(char2sinodate(x))
+    } else if (class(x) == "Date") {
+        return(convertdate(x))
+    }
+}
 
 
 #utils::str(sinodate)
