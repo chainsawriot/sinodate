@@ -214,3 +214,53 @@ as.sinodate <- function(x, ...) {
 
 
 #utils::str(sinodate)
+
+setGeneric(name="toDate", def = function(object, ...)
+       {
+           standardGeneric("toDate")
+       }
+)
+
+
+setMethod(f = "toDate", signature = "sinodate", definition = function(object, ignoreleap = FALSE) {
+    params <- lookupData(lookup="params")
+    referenceDate <- params$referenceDate
+    maxDate <- params$maxDate
+    lYear <- params$lYear
+    lMonth <- params$lMonth
+    lDay <- params$lDay
+    timeSpan <- 0
+    for (y in year(referenceDate):(object@year-1)) {
+      timeSpan <- timeSpan + lookupData(y, lookup="year")
+    }
+    #print(timeSpan)
+    leapMonth <-  lookupData(object@year, lookup="leap")
+    offsetMonth <- object@month-1
+    if (object@month > leapMonth) { ## adjusted for the leap month
+      offsetMonth <- offsetMonth + 1
+    }
+    if (object@month > 1) {
+      for (m in 1:offsetMonth) {
+        timeSpan <- timeSpan + lookupData(object@year, m, lookup="month")
+      }
+    }
+    timeSpan = timeSpan + object@day - 1
+    #print(timeSpan)
+    if (leapMonth == object@month) {
+      res <- c((referenceDate + days(timeSpan)), (referenceDate + days(timeSpan + lookupData(object@year, leapMonth, lookup="month"))))
+      #print(res)
+      if (object@leap) {
+          return(res[2])
+      } else if (!ignoreleap) {
+          return(res)
+      } else {
+          return(res[1])
+      }      
+    } else {
+      return(referenceDate + days(timeSpan))
+    }}
+          )
+
+as.Date.sinodate <- function(x, ...) {
+    toDate(x, ...)
+}

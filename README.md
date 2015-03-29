@@ -4,7 +4,7 @@ S4 class to represent date in Chinese calendar. (Mandarin: Nongli, Cantonese: Nu
 
 ## Features
 
-# Representation and conversion
+### Representation and conversion
 
 ```R
 as.sinodate("1981-06-20")
@@ -20,6 +20,13 @@ as.sinodate("2014-09L-30") # Invalid
 as.sinodate("2014-02-30") # Valid
 ```
 
-# TODO
+### conversion of sinodate to Gregorian date
 
-conversion of sinodate to gregorian date
+```r
+as.Date(as.sinodate("2015-01-01")) # Lunar new year of 2015
+as.Date(as.sinodate("2014-09-10")) # two dates will be returned because 9 is a leap month
+as.Date(as.sinodate("2014-09-10"), TRUE)
+```
+
+## References
+[Gregorian-Lunar Calendar Conversion Table](http://www.hko.gov.hk/gts/time/conversionc.htm)
