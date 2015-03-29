@@ -156,4 +156,47 @@ setMethod(f = "cantonese", signature = "sinodate", definition = function(object,
 #cantonese(as.sinodate("1981-06-20"))
 #cantonese(as.sinodate("1981-06-20"), TRUE)
 
+
+convertDate <- function(gDate) {
+    params <- lookupData(lookup="params")
+    referenceDate <- params$referenceDate
+    maxDate <- params$maxDate
+    lYear <- params$lYear
+    lMonth <- params$lMonth
+    lDay <- params$lDay    
+### assert gDate >= referenceDate and <= maxDate
+    if (gDate < referenceDate | gDate > maxDate) {
+        stop(paste0("gDate out of the supported range:", referenceDate, " to ", maxDate))
+    }
+    timeSpan <- as.integer(gDate - referenceDate)
+    ### get the number of day of a given year
+    yearDayCount <-  lookupData(lunarYearInt = lYear, lookup="year")
+    while (timeSpan >= yearDayCount) {
+        timeSpan <- timeSpan - yearDayCount
+        lYear <- lYear + 1
+        yearDayCount <- lookupData(lunarYearInt = lYear, lookup="year")
+    }
+    monthDayCount <- lookupData(lunarYearInt=lYear, lunarMonthInt = lMonth, lookup="month")
+    while (timeSpan >= monthDayCount) {
+        timeSpan <- timeSpan - monthDayCount
+        lMonth <- lMonth + 1
+        monthDayCount <- lookupData(lunarYearInt=lYear, lunarMonthInt = lMonth, lookup="month")
+    }
+    leapMonth <-  lookupData(lunarYearInt=lYear, lookup="leap")
+    lMonthIsLeap <- FALSE
+    if (lMonth > leapMonth) {
+        lMonth <- lMonth - 1
+        if (lMonth == leapMonth) {
+            lMonthIsLeap <- TRUE
+        }
+    }
+    lDay <- lDay + timeSpan
+    return(sinodate(year = lYear, month = lMonth, day = lDay, leap = lMonthIsLeap))
+}
+
+#convertDate(as.Date("1981-07-21"))
+#convertDate(as.Date("2014-10-24"))
+#cantonese(convertDate(as.Date("2014-9-28")))
+
+
 #utils::str(sinodate)

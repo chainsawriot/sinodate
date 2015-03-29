@@ -1,8 +1,9 @@
 Package: sinodate
-Title: An RefClass implementation of date in Chinese Calendar (Mandarin: Nongli, Cantonese: Nung Lik)
+Title: S4 class to represent date in Chinese calendar (Mandarin: Nongli, Cantonese: Nung Lik)
 Version: 0.1
 Authors@R: "Chung-hong Chan <Chung-hong Chan> [aut, cre]"
-Description: What the package does (one paragraph)
-Depends: R (>= 3.1.2)
+Description: S4 class to represent date in Chinese calendar. Also provided functions for conversion between Georgian calendar and sinodate.
+Depends: R (>= 3.0.0)
+Imports: lubridate
 License: MIT
 LazyData: true

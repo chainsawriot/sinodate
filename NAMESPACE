@@ -1,1 +1,4 @@
-exportPattern("^[^\\.]")
+import(lubridate)
+exportClasses(sinodate)
+exportMethods(show, cantonese)
+export(as.sinodate)
