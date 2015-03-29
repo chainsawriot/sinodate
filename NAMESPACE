@@ -1,5 +1,4 @@
 import(lubridate)
 exportClasses(sinodate)
-exportMethods(show, cantonese)
 export(as.sinodate)
-export(convertdate)
+export(as.character.sinodate)
