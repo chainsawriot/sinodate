@@ -204,11 +204,15 @@ convertdate <- function(gDate) {
 #convertDate(as.Date("2014-10-24"))
 #cantonese(convertDate(as.Date("2014-9-28")))
 
-as.sinodate <- function(x, ...) {
-    if (class(x) == "character") {
+as.sinodate <- function(x, gregorian = FALSE) {
+    if (class(x) == "character" & !gregorian) {
         return(char2sinodate(x))
+    } else if (class(x) == "character" & gregorian) {
+        return(convertdate(as.Date(x)))
     } else if (class(x) == "Date") {
         return(convertdate(x))
+    } else {
+        stop("x must be in the class of character or Date")
     }
 }
 

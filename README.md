@@ -1,14 +1,26 @@
 # sinodate
 
-S4 class to represent date in Chinese calendar. (Mandarin: Nongli, Cantonese: Nung Lik 農曆)
+S4 class to represent date in Chinese calendar. (Often incorrectly refers to as Lunar calendar. Mandarin: Nongli, Cantonese: Nung Lik 農曆/舊曆/陰曆)
+
+# Package Installation
+
+```r
+if(!require("devtools")){
+    install.packages("devtools")
+    library("devtools")
+}
+install_github("chainsawriot/sinodate")
+```
 
 ## Features
 
 ### Representation and conversion
 
 ```R
+sinodate(year = 1981, month = 6, day = 20)
 as.sinodate("1981-06-20")
 as.sinodate(as.Date("1981-07-21")) # conversion from Gregorian Date to sinodate
+as.sinodate("1981-07-21", gregorian = TRUE) # equivalent to the above, easier to use
 as.character(as.sinodate(as.Date("1981-07-21")))
 as.character(as.sinodate(as.Date("1981-07-21")), TRUE)
 
